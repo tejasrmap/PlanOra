@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calendar, User, LogIn } from 'lucide-react';
+import { Calendar, LogIn } from 'lucide-react';
 
 const Navbar = () => {
   return (
