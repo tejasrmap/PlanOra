@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RegistrationStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +30,11 @@ export const registerForEvent = async (req: Request, res: Response) => {
     }
 
     const registration = await prisma.registration.create({
-      data: { userId, eventId },
+      data: { 
+        userId, 
+        eventId,
+        status: RegistrationStatus.CONFIRMED 
+      },
     });
 
     res.status(201).json(registration);
@@ -56,7 +60,7 @@ export const getEventAttendees = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const attendees = await prisma.registration.findMany({
-      where: { eventId: id, status: 'CONFIRMED' },
+      where: { eventId: id as string, status: 'CONFIRMED' },
       include: { user: { select: { id: true, name: true, email: true } } },
     });
     res.json(attendees);

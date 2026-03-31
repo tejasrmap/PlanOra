@@ -18,7 +18,7 @@ export const getEventById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const event = await prisma.event.findUnique({
-      where: { id },
+      where: { id: id as string },
       include: { organizer: { select: { name: true } } },
     });
     if (!event) return res.status(404).json({ message: 'Event not found' });
@@ -37,12 +37,12 @@ export const createEvent = async (req: Request, res: Response) => {
       data: {
         title,
         description,
-        date: new Date(date),
+        date: new Date(date).toISOString(),
         time,
         location,
         category,
         imageUrl,
-        capacity: parseInt(capacity),
+        capacity: Number(capacity) || 0,
         organizerId,
       },
     });
@@ -55,12 +55,14 @@ export const createEvent = async (req: Request, res: Response) => {
 export const updateEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   const data = req.body;
-  if (data.date) data.date = new Date(data.date);
 
   try {
     const event = await prisma.event.update({
-      where: { id },
-      data,
+      where: { id: id as string },
+      data: {
+        ...data,
+        date: data.date ? new Date(data.date).toISOString() : undefined,
+      },
     });
     res.json(event);
   } catch (error) {
@@ -71,7 +73,7 @@ export const updateEvent = async (req: Request, res: Response) => {
 export const deleteEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prisma.event.delete({ where: { id } });
+    await prisma.event.delete({ where: { id: id as string } });
     res.json({ message: 'Event deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting event', error });
