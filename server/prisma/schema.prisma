@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  events        Event[]        @relation("Organizer")
+  registrations Registration[]
+}
+
+model Event {
+  id            String         @id @default(uuid())
+  title         String
+  description   String
+  date          DateTime
+  time          String
+  location      String
+  category      String
+  imageUrl      String?
+  capacity      Int
+  organizerId   String
+  organizer     User           @relation("Organizer", fields: [organizerId], references: [id])
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+}
+
+model Registration {
+  id           String             @id @default(uuid())
+  userId       String
+  eventId      String
+  status       RegistrationStatus @default(CONFIRMED)
+  registeredAt DateTime           @default(now())
+  user         User               @relation(fields: [userId], references: [id])
+  event        Event              @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RegistrationStatus {
+  CONFIRMED
+  CANCELLED
+}
