@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Search, Sparkles, Loader2 } from 'lucide-react';
+import { Search, Sparkles, Loader2 } from 'lucide-react';
 import EventCard from '../components/EventCard';
 import API from '../api';
 
