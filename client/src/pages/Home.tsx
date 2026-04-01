@@ -74,27 +74,28 @@ const Home = () => {
 
       <div className="container relative z-10 px-6 max-w-7xl mx-auto">
         {/* Hero Section */}
-        <section className="text-center mb-40">
+        <section className="text-center mb-40 pt-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center"
           >
-            <div className="inline-flex items-center gap-3 px-6 py-2 glass bg-white/5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-10 border border-white/10 shadow-2xl">
+            <div className="inline-flex items-center gap-3 px-6 py-3 glass bg-white/5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-10 border border-white/10 shadow-2xl">
               <Sparkles size={14} className="animate-pulse" />
               The Sovereign Nexus of Events
             </div>
             
-            <h1 className="text-[clamp(3rem,10vw,7.5rem)] leading-[0.85] font-black tracking-[-0.05em] mb-10 text-white">
+            <h1 className="text-[clamp(3rem,10vw,7.5rem)] leading-[0.85] font-black tracking-[-0.05em] mb-10 text-white w-full">
               Beyond<br />
-              <span className="gradient-text">Imagination.</span>
+              <span className="gradient-text italic">Imagination.</span>
             </h1>
 
             <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-16 font-medium leading-relaxed">
               PlanOra is the state-of-the-art ecosystem for the world's most exclusive creators and unforgettable experiences.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-stretch justify-center gap-6 mb-24 max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-stretch justify-center gap-6 mb-24 w-full max-w-2xl mx-auto px-4">
               <div className="relative flex-grow group">
                 <div className="absolute inset-0 bg-indigo-500/10 blur-2xl group-focus-within:bg-indigo-500/20 transition-all rounded-3xl" />
                 <div className="relative flex items-center glass bg-white/5 border-white/10 px-8 h-20 rounded-3xl">
@@ -105,11 +106,12 @@ const Home = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search the nexus..." 
                     className="bg-transparent border-none p-4 focus:ring-0 text-white w-full placeholder:text-slate-600 font-bold text-lg"
+                    style={{ border: 'none', outline: 'none' }}
                   />
                 </div>
               </div>
-              <button className="btn-primary flex items-center justify-center gap-4 px-12 h-20 rounded-3xl whitespace-nowrap text-lg font-black uppercase tracking-wider shadow-2xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                Enter Nexus
+              <button className="btn-primary flex items-center justify-center gap-4 px-12 h-20 rounded-3xl whitespace-nowrap text-lg font-black uppercase tracking-wider shadow-2xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                Enter
                 <ArrowRight size={24} />
               </button>
             </div>

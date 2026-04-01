@@ -1,62 +1,66 @@
 import { Link } from 'react-router-dom';
-import { Calendar, LogIn, Sparkles, User, LayoutDashboard } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { motion } from 'framer-motion';
+import { Calendar, User, LogOut, Sparkles } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
 
   return (
-    <motion.nav 
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-5xl"
-    >
-      <div className="glass px-8 py-4 flex items-center justify-between rounded-full border-white/10">
-        <Link to="/" className="flex items-center gap-2 text-2xl font-bold tracking-tighter group">
-          <div className="p-2 bg-indigo-500/20 rounded-lg group-hover:bg-indigo-500/30 transition-colors">
-            <Calendar className="text-indigo-400" size={24} />
+    <nav className="fixed top-8 left-0 right-0 z-50 flex justify-center px-4">
+      <motion.div 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className="glass px-6 py-3 flex items-center justify-between rounded-full border-white/10 shadow-2xl backdrop-blur-2xl w-full max-w-5xl"
+      >
+        <div className="flex items-center gap-8">
+          <Link to="/" className="flex items-center gap-2 group decoration-none">
+            <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+              <Calendar className="text-white" size={20} />
+            </div>
+            <span className="text-2xl font-black tracking-tighter text-white">Plan<span className="text-indigo-400">Ora</span></span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/" className="text-sm font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-widest decoration-none">Events</Link>
+            {user && (
+              <Link to="/dashboard" className="text-sm font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-widest decoration-none">Organize</Link>
+            )}
           </div>
-          <span className="gradient-text">PlanOra</span>
-        </Link>
-        
-        <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Events</Link>
+        </div>
+
+        <div className="flex items-center gap-3">
           {user ? (
-            <>
-              <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                <LayoutDashboard size={16} className="text-indigo-400/60" />
-                Dashboard
-              </Link>
-              <div className="flex items-center gap-4 pl-4 border-l border-white/10">
-                <div className="flex items-center gap-2 text-sm font-medium text-indigo-400 bg-indigo-500/10 py-1 px-3 rounded-full border border-indigo-500/20">
-                  <User size={14} />
-                  {user.name}
+            <div className="flex items-center gap-3">
+              <Link to="/dashboard" className="flex items-center gap-2 p-2 glass rounded-full border-white/5 hover:bg-white/10 transition-all decoration-none">
+                <div className="w-8 h-8 bg-indigo-500/20 rounded-full flex items-center justify-center">
+                  <User size={16} className="text-indigo-400" />
                 </div>
-                <button 
-                  onClick={logout}
-                  className="text-xs font-semibold uppercase tracking-wider text-slate-500 hover:text-rose-400 transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="flex items-center gap-6">
-              <Link to="/login" className="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                <LogIn size={18} />
-                Login
+                <span className="text-sm font-bold text-white pr-2 hidden sm:inline">{user.name}</span>
               </Link>
-              <Link to="/register" className="btn-primary flex items-center gap-2 py-2 px-6 rounded-full">
-                <Sparkles size={16} />
-                Join Now
+              <button 
+                onClick={logout}
+                className="p-3 glass rounded-full border-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all text-slate-400"
+                title="Sign Out"
+              >
+                <LogOut size={18} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link to="/login" className="px-5 py-2.5 text-sm font-bold text-slate-400 hover:text-white transition-colors decoration-none">
+                Sign In
+              </Link>
+              <Link to="/register" className="btn-primary flex items-center gap-2 group px-6 py-2.5 rounded-full relative overflow-hidden decoration-none">
+                <Sparkles size={16} className="group-hover:rotate-12 transition-transform" />
+                <span className="relative z-10 text-sm">Join Now</span>
               </Link>
             </div>
           )}
         </div>
-      </div>
-    </motion.nav>
+      </motion.div>
+    </nav>
   );
 };
 
