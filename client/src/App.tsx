@@ -13,7 +13,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-slate-950 text-slate-50">
+        <div className="min-h-screen">
           <Navbar />
           <main>
             <Routes>

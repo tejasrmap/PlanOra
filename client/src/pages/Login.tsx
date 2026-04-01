@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogIn, Mail, Lock, Loader2 } from 'lucide-react';
+import { LogIn, Mail, Lock, Loader2, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -22,72 +22,94 @@ const Login = () => {
       login(res.data.token, res.data.user);
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Nexus authentication failed.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
+    <div className="relative flex items-center justify-center min-h-screen px-4 py-24 overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-600/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-600/10 rounded-full blur-[110px] pointer-events-none" />
+
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="glass p-10 max-w-md w-full border-white/5"
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 glass p-12 max-w-md w-full rounded-[3rem] border-white/5 shadow-2xl shadow-indigo-500/5"
       >
-        <div className="flex justify-center mb-8">
-          <div className="p-4 bg-indigo-500/20 rounded-2xl">
-            <LogIn className="text-indigo-400" size={32} />
-          </div>
+        <div className="flex flex-col items-center mb-12">
+          <motion.div 
+            whileHover={{ scale: 1.1, rotate: 15 }}
+            className="p-6 bg-indigo-500/10 rounded-3xl mb-6 border border-indigo-500/20 shadow-inner"
+          >
+            <LogIn className="text-indigo-400" size={40} />
+          </motion.div>
+          <h2 className="text-5xl font-black text-center mb-3 tracking-tighter text-white">Welcome Back</h2>
+          <p className="text-slate-500 text-center font-medium text-lg">Reconnect with the nexus.</p>
         </div>
         
-        <h2 className="text-3xl font-extrabold text-center mb-2 tracking-tighter">Welcome Back</h2>
-        <p className="text-slate-400 text-center mb-10">Enter your credentials to access PlanOra.</p>
-        
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-8" onSubmit={handleSubmit}>
           {error && (
-            <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm rounded-lg text-center font-semibold">
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs rounded-2xl text-center font-bold uppercase tracking-wider"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-300 ml-1">Email Address</label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-              <input 
-                type="email" 
-                placeholder="name@example.com" 
-                className="pl-12"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400/80 ml-1">Email Nexus</label>
+              <div className="relative group">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                <input 
+                  type="email" 
+                  placeholder="name@nexus.com" 
+                  className="input-field pl-14 h-14 rounded-2xl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400/80 ml-1">Security Key</label>
+              <div className="relative group">
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                <input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="input-field pl-14 h-14 rounded-2xl"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                className="pl-12"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          
-          <button type="submit" disabled={loading} className="btn-primary w-full py-4 text-lg mt-4 flex items-center justify-center gap-2">
-            {loading ? <Loader2 className="animate-spin" /> : 'Login'}
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="btn-primary w-full h-16 text-md font-bold uppercase tracking-[0.15em] mt-6 rounded-2xl shadow-xl shadow-indigo-500/10 flex items-center justify-center gap-3 group transition-all"
+          >
+            {loading ? <Loader2 className="animate-spin" size={24} /> : (
+              <>
+                Initialize Access
+                <Sparkles size={20} className="group-hover:animate-pulse" />
+              </>
+            )}
           </button>
         </form>
         
-        <p className="mt-8 text-center text-slate-400 text-sm">
-          Don't have an account? <Link to="/register" className="text-indigo-400 hover:underline">Register now</Link>
+        <p className="mt-12 text-center text-slate-500 font-medium">
+          New to PlanOra? <Link to="/register" className="text-indigo-400 hover:text-white transition-colors font-bold">Create Identity</Link>
         </p>
       </motion.div>
     </div>
